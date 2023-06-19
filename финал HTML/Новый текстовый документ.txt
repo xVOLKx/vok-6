@@ -1,0 +1,543 @@
+1 Задание 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .orange {
+      background-color: orange;
+    }
+  </style>
+</head>
+<body>
+  <table id="myTable">
+    <!-- Место для генерации таблицы -->
+  </table>
+
+  <button onclick="addNumber()">Добавить число</button>
+
+  <script>
+    // Задание 1
+    var numbers = generateRandomNumbers(30);
+    createTable(numbers);
+
+    function generateRandomNumbers(count) {
+      var numbers = [];
+      for (var i = 0; i < count; i++) {
+        var number = Math.floor(Math.random() * 100);
+        numbers.push(number);
+      }
+      return numbers;
+    }
+
+    function createTable(numbers) {
+      var table = document.getElementById("myTable");
+      var rowCounter = 0;
+      var cellCounter = 0;
+
+      for (var i = 0; i < numbers.length; i++) {
+        var number = numbers[i];
+
+        var cell = document.createElement("td");
+        cell.innerText = number;
+
+        if (number >= 50) {
+          cell.classList.add("orange");
+        }
+
+        var row = table.rows[rowCounter];
+        if (!row) {
+          row = table.insertRow(rowCounter);
+        }
+        row.appendChild(cell);
+
+        cellCounter++;
+        if (cellCounter >= 6) {
+          cellCounter = 0;
+          rowCounter++;
+        }
+      }
+    }
+
+    // Задание 2
+    function addNumber() {
+      var table = document.getElementById("myTable");
+      var row = table.rows[Math.floor(Math.random() * 5)];
+      var cell = document.createElement("td");
+      var number = Math.floor(Math.random() * 100);
+      cell.innerText = number;
+
+      if (number >= 50) {
+        cell.classList.add("orange");
+      }
+
+      row.appendChild(cell);
+    }
+  </script>
+</body>
+</html>
+
+
+2 Задание 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Котики</title>
+</head>
+<body>
+  <h1>Котики</h1>
+  <div id="cat-container"></div>
+
+  <script>
+    // Загрузка данных из файла
+    fetch('File.txt')
+      .then(response => response.text())
+      .then(data => {
+        // Парсинг данных из файла
+        const catData = data.trim().substring(13);
+        const cats = JSON.parse(catData);
+
+        // Создание элементов для каждого котика
+        cats.forEach((cat) => {
+          const catDiv = document.createElement('div');
+
+          const catName = document.createElement('h2');
+          catName.innerText = cat.name;
+          catDiv.appendChild(catName);
+
+          const catImg = document.createElement('img');
+          catImg.src = cat.img_link;
+          catImg.alt = cat.name;
+          catDiv.appendChild(catImg);
+
+          const catAge = document.createElement('p');
+          catAge.innerText = `Возраст: ${cat.age} года`;
+          catDiv.appendChild(catAge);
+
+          const catRate = document.createElement('p');
+          catRate.innerText = `Рейтинг: ${cat.rate}/10`;
+          catDiv.appendChild(catRate);
+
+          const catDescription = document.createElement('p');
+          catDescription.innerText = cat.description;
+          catDiv.appendChild(catDescription);
+
+          document.getElementById('cat-container').appendChild(catDiv);
+        });
+      })
+      .catch(error => {
+        console.error('Ошибка загрузки данных:', error);
+      });
+  </script>
+</body>
+</html>
+
+3 Задание 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Каталог товаров</title>
+  <!-- Подключение Bootstrap -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+  <style>
+    /* Стили для меню */
+    .menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu li {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .menu li:hover {
+      background-color: #e2e2e2;
+    }
+
+    .sub-menu {
+      display: none;
+      margin-left: 20px;
+    }
+
+    /* Стили для активного элемента и его дочерних элементов */
+    .active {
+      font-weight: bold;
+    }
+
+    .active .sub-menu {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <ul class="menu">
+    <li class="nav-item">Категория 1
+      <ul class="sub-menu">
+        <li>Подкатегория 1.1</li>
+        <li>Подкатегория 1.2
+          <ul class="sub-menu">
+            <li>Подподкатегория 1.2.1</li>
+            <li>Подподкатегория 1.2.2</li>
+          </ul>
+        </li>
+        <li>Подкатегория 1.3</li>
+      </ul>
+    </li>
+    <li class="nav-item">Категория 2
+      <ul class="sub-menu">
+        <li>Подкатегория 2.1</li>
+        <li>Подкатегория 2.2</li>
+        <li>Подкатегория 2.3</li>
+      </ul>
+    </li>
+    <li class="nav-item">Категория 3
+      <ul class="sub-menu">
+        <li>Подкатегория 3.1</li>
+        <li>Подкатегория 3.2</li>
+        <li>Подкатегория 3.3
+          <ul class="sub-menu">
+            <li>Подподкатегория 3.3.1</li>
+            <li>Подподкатегория 3.3.2</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <!-- Подключение Bootstrap JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Получаем все элементы списка
+    var menuItems = document.querySelectorAll('.menu li');
+
+    // Перебираем элементы и добавляем обработчик события клика
+    menuItems.forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        var subMenu = item.querySelector('.sub-menu');
+
+        if (subMenu) {
+          // Если у элемента есть подменю, разворачиваем его
+          subMenu.style.display = (subMenu.style.display === 'block') ? 'none' : 'block';
+          item.classList.toggle('active');
+        } else {
+          // Иначе выводим сообщение о переходе по ссылке
+          alert('Вы переходите по ссылке');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+4 Задание 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Add Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <style>
+    .slider {
+      width: 300px;
+      height: 50px;
+      background-color: #f2f2f2;
+      position: relative;
+      margin: 20px;
+    }
+    
+    .slider-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #ddd;
+      position: absolute;
+      top: 20px;
+    }
+    
+    .slider-thumb {
+      width: 20px;
+      height: 20px;
+      background-color: #4caf50;
+      position: absolute;
+      top: 10px;
+      left: 0;
+      cursor: grab;
+      border-radius: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .slider-value {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="slider">
+      <div class="slider-bar"></div>
+      <div class="slider-thumb"></div>
+      <div class="slider-value">0</div>
+    </div>
+  </div>
+
+  <!-- Add Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const slider = document.querySelector('.slider');
+      const thumb = slider.querySelector('.slider-thumb');
+      const valueDisplay = slider.querySelector('.slider-value');
+    
+      let isDragging = false;
+    
+      function updateValue(event) {
+        const sliderWidth = slider.offsetWidth;
+        const clickX = event.clientX - slider.getBoundingClientRect().left;
+        const percent = Math.min(Math.max(clickX / sliderWidth, 0), 1);
+        const value = Math.round(percent * 100);
+        
+        thumb.style.left = `${percent * 100}%`;
+        valueDisplay.textContent = value;
+      }
+    
+      thumb.addEventListener('mousedown', function() {
+        isDragging = true;
+      });
+    
+      document.addEventListener('mousemove', function(event) {
+        if (isDragging) {
+          updateValue(event);
+        }
+      });
+    
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+    
+      slider.addEventListener('click', function(event) {
+        updateValue(event);
+      });
+    });
+  </script>
+</body>
+</html>
+
+5 Задание 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Банковская карточка</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .card {
+      width: 400px;
+      height: 240px;
+      background-color: #4CAF50; /* Зеленый цвет фона */
+      border-radius: 10px;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+      color: white; /* Цвет текста внутри карты */
+    }
+
+    .card .logo {
+      position: absolute;
+      top: 140px;
+      right: 20px;
+      width: 50px;
+    }
+
+    .card .card-number {
+      font-size: 20px;
+      margin-bottom: 80px;
+      text-align: center;
+    }
+
+    .card .expiration {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .card .cardholder {
+      font-size: 18px;
+      font-weight: bold;
+      bottom: 100px;
+    }
+
+    .card-thumbnail {
+      width: 400px;
+      height: 240px;
+      background-color: lightgray;
+      margin-top: 10px;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .form-container .card-form {
+      flex: 1;
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Банковская карточка</h1>
+    <div class="form-container">
+      <div class="card-form">
+        <form id="card-form">
+          <div class="form-group">
+            <label for="bank-name">Название банка:</label>
+            <input type="text" class="form-control" id="bank-name" value="Сбер" disabled>
+          </div>
+          <div class="form-group">
+            <label for="payment-system">Тип платежной системы:</label>
+            <select class="form-control" id="payment-system" required>
+              <option value="">Выберите тип платежной системы</option>
+              <option value="visa">Visa</option>
+              <option value="mir">Мир</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="card-number">Номер карты:</label>
+            <input type="text" class="form-control" id="card-number" maxlength="19" required>
+          </div>
+          <div class="form-group">
+            <label for="card-holder">Имя держателя карты:</label>
+            <input type="text" class="form-control" id="card-holder" required>
+          </div>
+          <div class="form-group">
+            <label for="expiration-date">Месяц и год окончания карты (MM/YYYY):</label>
+            <input type="text" class="form-control" id="expiration-date" placeholder="Например, 02/2027" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Добавить карту</button>
+        </form>
+      </div>
+
+      <div class="card-thumbnail" id="card-thumbnail">
+        <div class="card">
+          <div class="logo" id="card-logo"> </div>
+          <div class="card-number">**** **** **** 1234</div>
+          <div class="expiration">06/25</div>
+          <div class="cardholder">Имя Держателя</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="table mt-4">
+      <thead>
+        <tr>
+          <th>Название банка</th>
+          <th>Тип платежной системы</th>
+          <th>Номер карты</th>
+          <th>Имя держателя</th>
+          <th>Месяц и год окончания</th>
+        </tr>
+      </thead>
+      <tbody id="card-table">
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Обработчик отправки формы
+    document.getElementById('card-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Получение значений полей формы
+      var bankName = document.getElementById('bank-name').value;
+      var paymentSystem = document.getElementById('payment-system').value;
+      var cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+      var cardHolder = document.getElementById('card-holder').value;
+      var expirationDate = document.getElementById('expiration-date').value;
+
+      // Очистка полей формы
+      document.getElementById('payment-system').value = '';
+      document.getElementById('card-number').value = '';
+      document.getElementById('card-holder').value = '';
+      document.getElementById('expiration-date').value = '';
+
+      // Отображение информации в миниатюре карты
+      document.getElementById('card-thumbnail').innerHTML = '<div class="card"><div class="logo" id="card-logo">' + paymentSystem + '</div><div class="card-number">' + cardNumber + '</div><div class="expiration">' + expirationDate + '</div><div class="cardholder">' + cardHolder + '</div></div>';
+
+      // Создание новой строки в таблице
+      var tableRow = document.createElement('tr');
+      tableRow.innerHTML = '<td>' + bankName + '</td><td>' + paymentSystem + '</td><td>' + cardNumber + '</td><td>' + cardHolder + '</td><td>' + expirationDate + '</td>';
+      document.getElementById('card-table').appendChild(tableRow);
+    });
+
+    // Добавление слеша после ввода месяца
+    document.getElementById('expiration-date').addEventListener('input', function(e) {
+      var value = e.target.value;
+      var formattedValue = formatExpirationDate(value);
+      e.target.value = formattedValue;
+    });
+
+    // Форматирование номера карты: **** **** **** 1234
+    document.getElementById('card-number').addEventListener('input', function(e) {
+      var value = e.target.value;
+      var formattedValue = formatCardNumber(value);
+      e.target.value = formattedValue;
+    });
+
+    // Функция форматирования номера карты
+    function formatCardNumber(cardNumber) {
+      return cardNumber;
+    }
+
+    // Функция форматирования даты окончания
+    function formatExpirationDate(expirationDate) {
+      var formattedDate = expirationDate.replace(/\D/g, ''); // Удаляем все нечисловые символы
+      if (formattedDate.length > 2) {
+        formattedDate = formattedDate.slice(0, 2) + '/' + formattedDate.slice(2); // Добавляем слеш после второй цифры
+      }
+      if (formattedDate.length > 7) {
+        formattedDate = formattedDate.slice(0, 7); // Ограничиваем длину ввода до 7 символов (MM/YYYY)
+      }
+      return formattedDate;
+    }
+
+    // Отображение логотипа платежной системы
+    document.getElementById('payment-system').addEventListener('change', function(e) {
+      var paymentSystem = e.target.value;
+      var cardLogo = document.getElementById('card-logo');
+      switch (paymentSystem) {
+        case 'visa':
+          cardLogo.textContent = 'Visa';
+          break;
+        case 'mir':
+          cardLogo.textContent = 'МИР';
+          break;
+        default:
+          cardLogo.textContent = '';
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
+
